@@ -1,0 +1,73 @@
+# ------------------  INPUTS TO MAIN PROGRAM  -------------------
+# GLOBAL SIMULATION PARAMETERS
+# NB declared in AmrLevelAdv.cpp : 
+# verbose, cfl, do_reflux, NUM_STATE, NUM_GROW
+nsteps_max = 1500
+plot_int = 50
+ndmin = 2
+NCOMP = 8
+startT = 0.0
+#finalT = 0.20
+chatter = 1
+testcase = sod   #possible test cases: sod, toro2 - toro5, 
+#higher order extension parameters:
+MUSCL = 1
+#RIGID BODY on/off:
+rigid_body = 0
+rigid_geom = none
+#PROBLEM VARIABLES:
+amr.derive_plot_vars  = mass mom_x mom_y en rho u v p
+
+# PROBLEM SIZE & GEOMETRY
+geometry.is_periodic =  0  0  0
+geometry.coord_sys   =  0 		 # 0 => cartesian, 1 => cylidrical ? 2 => spherical ? 
+geometry.prob_lo     =  0.0  0.0  0.0
+geometry.prob_hi     =  1.0  1.0  1.0  #can this later be shifted to testcase?
+amr.n_cell           =  64   64   64
+
+# VERBOSITY
+adv.v              = 1       # verbosity in Adv
+amr.v              = 1       # verbosity in Amr
+#amr.grid_log         = grdlog  # name of grid logging file
+
+# REFINEMENT / REGRIDDING
+amr.max_level       = 2       # maximum level number allowed
+amr.ref_ratio       = 2 2 2 2 # refinement ratio
+amr.regrid_int      = 2       # how often to regrid
+amr.blocking_factor = 8       # block factor in grid generation
+amr.max_grid_size   = 16
+amr.refinement_prop	= mass
+amr.refinement_condition = log_grad		#options: grad, log_grad
+amr.refinement_grad_fracs = 0.9 0.9		#require at least max_level number of refinement ratios
+
+# CHECKPOINT FILES
+amr.checkpoint_files_output = 0     # 0 will disable checkpoint files
+amr.check_file              = chk   # root name of checkpoint file
+amr.check_int               = 5    # number of timesteps between checkpoints
+
+# PLOTFILES
+amr.plot_files_output = 1      # 0 will disable plot files
+amr.plot_file         = plt    # root name of plot file
+amr.plot_int          = 3     # number of timesteps between plot files
+
+
+# PROBIN FILENAME
+amr.probin_file = probin
+
+#---------------------------------TEST CASES-----------------------------------------
+#SOD TEST:
+sod.finalT			= 0.2
+sod.n_vars			= 4
+sod.vars			= rho u v p
+#primitive variables- 	rho:    u:		v:		p:	
+sod.PL 				= 1.0 		0.0 	0.0 	1.0	   
+sod.PR 				= 0.125		0.0		0.0		0.1	  
+sod.n_cells 		= 200 200 1
+sod.IC				= source			#options: x0, y0, source	
+sod.x0 				= 0.5
+
+
+
+
+
+
